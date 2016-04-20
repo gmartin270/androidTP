@@ -47,6 +47,10 @@ public class UserAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public JSONArray getUsrs(){
+        return this.usrs;
+    }
+
     @Override
     public int getCount() {
         if(usrs != null)

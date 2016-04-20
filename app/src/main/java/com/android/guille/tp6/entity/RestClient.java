@@ -20,7 +20,7 @@ import java.net.URL;
  */
 public class RestClient {
 
-    public static Context context;
+    private static Context context;
 
     private static class Config{
         public String url = null;
@@ -33,6 +33,14 @@ public class RestClient {
         public String error = null;
         public String result = null;
         public Result handler = null;
+    }
+
+    public static Context getContext() {
+        return context;
+    }
+
+    public static void setContext(Context context) {
+        RestClient.context = context;
     }
 
     public interface Result{
