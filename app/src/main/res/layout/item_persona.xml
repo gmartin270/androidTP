@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:columnCount="3"
+        android:rowCount="2"
+        android:alpha="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="74dp"
+            android:layout_height="wrap_content"
+            android:text="Nombre:"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignBottom="@+id/txtNomCompleto" />
+
+        <TextView
+            android:id="@+id/txtNomCompleto"
+            android:layout_width="269dp"
+            android:layout_height="31dp"
+            android:text="nom_completo"
+            android:textStyle="bold"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView1" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="e-Mail:     "
+            android:textSize="@dimen/size"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_alignTop="@+id/txtEmailV"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/txtEmailV" />
+
+        <TextView
+            android:id="@+id/txtEmailV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.00"
+            android:text="email"
+            android:textSize="@dimen/size"
+            android:textStyle="bold"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_below="@+id/txtNomCompleto"
+            android:layout_alignStart="@+id/txtNomCompleto"
+            android:layout_alignParentBottom="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/delete"
+        android:src="@android:drawable/ic_menu_delete"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>
+
+	

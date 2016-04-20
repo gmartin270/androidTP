@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TP6</string>
+    <string name="deleteUserTitle">Borrado de persona</string>
+    <string name="deleteUserMessage">Está seguro de borrar el registro?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+</resources>
