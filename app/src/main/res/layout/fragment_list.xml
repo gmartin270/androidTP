@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.guille.tp5.fragment.ListFragment">
+    tools:context="com.android.guille.tp6.fragment.ListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,8 @@
             <ListView
                 android:id="@+id/listaPersonas"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                >
             </ListView>
 
         </LinearLayout>

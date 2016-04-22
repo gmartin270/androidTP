@@ -30,7 +30,7 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         if(adapter==null) {
-            adapter = UserAdapter.getInstance((MainActivity)getActivity());
+            adapter = UserAdapter.getInstance();
         }
         root = inflater.inflate(R.layout.fragment_list, container, false);
         Button fab = (Button) root.findViewById(R.id.btnAdd);
@@ -63,8 +63,6 @@ public class ListFragment extends Fragment {
                 }
             }
         });
-
-        //adapter.fetchUsers();
 
         return root;
     }

@@ -52,6 +52,7 @@ public class FormFragment extends Fragment {
                         apellido.getText().toString(),
                         mail.getText().toString());
                 setUser(null);*/
+                mUser = new Persona();
                 mUser.setApellido(apellido.getText().toString());
                 mUser.setNombre(nombre.getText().toString());
                 mUser.setEmail(mail.getText().toString());

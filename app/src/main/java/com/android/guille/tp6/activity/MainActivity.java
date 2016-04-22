@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.android.guille.tp6.R;
+import com.android.guille.tp6.adapter.UserAdapter;
 import com.android.guille.tp6.entity.Persona;
 import com.android.guille.tp6.fragment.FormFragment;
 import com.android.guille.tp6.fragment.ListFragment;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mBinder = null;
+            //mBinder = null;
         }
     };
 
@@ -54,7 +56,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        UserAdapter userAdapter = UserAdapter.getInstance();
+        userAdapter.setmContext(MainActivity.this);
+
         Intent i = new Intent(this, APIClientService.class);
+        //bindService(i, mConnection, BIND_AUTO_CREATE);
+        startService(i);
         bindService(i, mConnection, BIND_AUTO_CREATE);
 
         View container = findViewById(R.id.container);
@@ -116,9 +123,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     public void rmUser(String id){
         if(mBinder != null){
             mBinder.rmUser(id);
         }
     }
+
+
 }

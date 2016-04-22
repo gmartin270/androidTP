@@ -31,15 +31,21 @@ public class UserAdapter extends BaseAdapter {
 
     private static UserAdapter instance;
 
-    private UserAdapter(Context context){
-        mContext = context;
-    }
+    private UserAdapter(){}
 
-    public static UserAdapter getInstance(Context context){
+    public static UserAdapter getInstance(){
         if(instance == null)
-            instance = new UserAdapter(context);
+            instance = new UserAdapter();
 
         return instance;
+    }
+
+    public Context getmContext() {
+        return mContext;
+    }
+
+    public void setmContext(Context mContext) {
+        this.mContext = mContext;
     }
 
     public void setList(JSONArray personas){

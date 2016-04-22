@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.guille.tp6.R;
@@ -31,6 +32,8 @@ import java.util.TimerTask;
  * Created by Guille on 15/04/2016.
  */
 public class APIClientService extends Service {
+    private static final String LOGTAG = "LogsAndroid";
+
     APIBinder mBinder = new APIBinder();
     UserAdapter mAdapter = null;
     public static String mURL = "http://tm5-agmoyano.rhcloud.com/";//"http://192.168.1.18:8080/ws/";
@@ -67,7 +70,7 @@ public class APIClientService extends Service {
 
         public void findUsers(){
             try{
-                if(mActivity != null) {
+
                     RestClient.get(mURL, new RestClient.Result() {
                         @Override
                         public void onResult(Object result) {
@@ -75,7 +78,7 @@ public class APIClientService extends Service {
                                 JSONArray resArray = (JSONArray) result;
 
                                 if (mBound) {
-                                    mAdapter = UserAdapter.getInstance(mActivity);
+                                    mAdapter = UserAdapter.getInstance();
                                     mAdapter.setList((JSONArray) result);
                                 } else {
                                     int newCount = 0;
@@ -102,7 +105,7 @@ public class APIClientService extends Service {
 
                                     if (newCount > 0) {
                                         if (newCount == 1) {
-                                            mBuilder.setContentText(newUser.getString("nombre" + " " + newUser.getString("apellido")));
+                                            mBuilder.setContentText(newUser.getString("nombre") + " " + newUser.getString("apellido"));
                                         } else {
                                             mBuilder.setContentText(newCount + " " + R.string.newUser);
                                         }
@@ -126,7 +129,7 @@ public class APIClientService extends Service {
                             Toast.makeText(APIClientService.this, message, Toast.LENGTH_SHORT);
                         }
                     });
-                }
+
             }catch(IOException e){
                 Toast.makeText(APIClientService.this, e.getMessage(), Toast.LENGTH_SHORT);
             }
@@ -190,7 +193,7 @@ public class APIClientService extends Service {
     public boolean onUnbind(Intent intent){
         try {
             FileOutputStream fos = openFileOutput(usersFile, MODE_PRIVATE);
-            mAdapter = UserAdapter.getInstance(null);
+            mAdapter = UserAdapter.getInstance();
 
             fos.write(mAdapter.getUsrs().toString().getBytes());
             fos.close();
@@ -205,6 +208,7 @@ public class APIClientService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("LocalService", "Received start id " + startId + ": " + intent);
         return START_STICKY;
     }
 }
