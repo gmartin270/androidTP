@@ -2,6 +2,7 @@ package com.android.guille.tp6.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,14 @@ import android.widget.EditText;
 
 import com.android.guille.tp6.R;
 import com.android.guille.tp6.activity.MainActivity;
-import com.android.guille.tp6.entity.Persona;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FormFragment extends Fragment {
 
     private static View mRoot;
-    private static Persona mUser = null;
+    private static JSONObject mUser = null;
     private static String mId;
 
     public FormFragment() {
@@ -47,17 +50,18 @@ public class FormFragment extends Fragment {
                 EditText nombre = (EditText) mRoot.findViewById(R.id.editTxtNom);
                 EditText apellido = (EditText) mRoot.findViewById(R.id.editTxtApe);
                 EditText mail = (EditText) mRoot.findViewById(R.id.editTxtEmail);
-                /*Persona user = new Persona(
-                        nombre.getText().toString(),
-                        apellido.getText().toString(),
-                        mail.getText().toString());
-                setUser(null);*/
-                mUser = new Persona();
-                mUser.setApellido(apellido.getText().toString());
-                mUser.setNombre(nombre.getText().toString());
-                mUser.setEmail(mail.getText().toString());
-                ((MainActivity) getActivity()).setUser(mUser, mUser.getId());
-                //mPos = null;
+
+                try {
+                    mUser = new JSONObject();
+                    mUser.put("apellido", apellido.getText().toString());
+                    mUser.put("nombre", nombre.getText().toString());
+                    mUser.put("", mail.getText().toString());
+                    ((MainActivity) getActivity()).setUser(mUser, (mId != null ? mId : null));
+
+                }catch (JSONException e){
+                    Log.e("Form Fragment - onClick", e.getMessage());
+                }
+
                 mUser = null;
             }
         });
@@ -76,7 +80,7 @@ public class FormFragment extends Fragment {
         return mRoot;
     }
 
-    private void setUser(Persona user) {
+    private void setUser(JSONObject user) {
         if(mRoot != null) {
             EditText nombre = (EditText) mRoot.findViewById(R.id.editTxtNom);
             EditText apellido = (EditText) mRoot.findViewById(R.id.editTxtApe);
@@ -86,16 +90,20 @@ public class FormFragment extends Fragment {
                 apellido.setText("");
                 mail.setText("");
             } else {
-                nombre.setText(user.getNombre());
-                apellido.setText(user.getApellido());
-                mail.setText(user.getEmail());
+                try {
+                    nombre.setText(user.getString("nombre"));
+                    apellido.setText(user.getString("apellido"));
+                    mail.setText(user.getString("mail"));
+                    mId = user.getString("_id");
+                }catch (JSONException e){
+                    Log.e("Form Fragment - setUser", e.getMessage());
+                }
             }
         }
     }
 
-    public void selectUser(Persona user, Integer pos) {
+    public void selectUser(JSONObject user) {
         setUser(user);
         mUser = user;
-        //mPos = pos;
     }
 }

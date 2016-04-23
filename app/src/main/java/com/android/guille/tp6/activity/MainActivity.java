@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     ListFragment list = new ListFragment();
     FormFragment form = new FormFragment();
     private Boolean isPort = null;
-    private Persona usr;
-    private Integer posicion;
     private APIClientService.APIBinder mBinder;
 
     public Boolean getIsPort() {
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //mBinder = null;
+            mBinder = null;
         }
     };
 
@@ -60,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         userAdapter.setmContext(MainActivity.this);
 
         Intent i = new Intent(this, APIClientService.class);
-        //bindService(i, mConnection, BIND_AUTO_CREATE);
         startService(i);
         bindService(i, mConnection, BIND_AUTO_CREATE);
 
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         unbindService(mConnection);
     }
 
-    public void selectUser(Object persona, Integer posicion)throws Exception{
+    public void selectUser(Object persona)throws Exception{
         if(isPort) {
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.replace(R.id.container, form);
@@ -94,42 +91,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(persona!=null)
-            form.selectUser((Persona)persona, posicion);
+            form.selectUser((JSONObject) persona);
     }
 
-    public void setUser(Persona user, String id) {
-        try {
-            if (user != null) {
-                JSONObject jPersona = new JSONObject();
-                jPersona.put("nombre", user.getNombre());
-                jPersona.put("apellido", user.getApellido());
-                jPersona.put("mail", user.getEmail());
-
-                if (id == null) {
-                    mBinder.addUser(jPersona);
-                } else {
-                    jPersona.put("_id", user.getId());
-                    mBinder.setUser(id, jPersona);
-                }
+    public void setUser(JSONObject user, String id) {
+        if (user != null) {
+            if (id == null) {
+                mBinder.addUser(user);
+            } else {
+                //user.put("_id", user.getId());
+                mBinder.setUser(id, user);
             }
+        }
 
-            if (isPort) {
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, list);
-                transaction.commit();
-            }
-        }catch (JSONException e){
-            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT);
+        if (isPort) {
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.container, list);
+            transaction.commit();
         }
     }
-
-
 
     public void rmUser(String id){
         if(mBinder != null){
             mBinder.rmUser(id);
         }
     }
-
-
 }

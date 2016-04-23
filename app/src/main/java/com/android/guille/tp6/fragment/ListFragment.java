@@ -12,7 +12,6 @@ import android.widget.ListView;
 import com.android.guille.tp6.R;
 import com.android.guille.tp6.activity.MainActivity;
 import com.android.guille.tp6.adapter.UserAdapter;
-import com.android.guille.tp6.entity.Persona;
 
 import org.json.JSONObject;
 
@@ -21,9 +20,7 @@ public class ListFragment extends Fragment {
     static UserAdapter adapter = null;
     View root;
 
-    public ListFragment() {
-        // Required empty public constructor
-    }
+    public ListFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +36,7 @@ public class ListFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     try {
-                        ((MainActivity) getActivity()).selectUser(null, null);
+                        ((MainActivity) getActivity()).selectUser(null);
                     }catch (Exception e){
 
                     }
@@ -56,8 +53,7 @@ public class ListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     JSONObject jUsr = adapter.getItem(position);
-                    Persona persona = new Persona(jUsr.getString("_id"), jUsr.getString("nombre"), jUsr.getString("apellido"), jUsr.getString("mail"));
-                    ((MainActivity) getActivity()).selectUser(persona, position);
+                    ((MainActivity) getActivity()).selectUser(jUsr);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -66,29 +62,4 @@ public class ListFragment extends Fragment {
 
         return root;
     }
-
-    /*public void addUser(Persona user) {
-
-        try {
-            JSONObject jUsr = new JSONObject();
-            jUsr.put("nombre", user.getNombre());
-            jUsr.put("apellido", user.getApellido());
-            jUsr.put("mail", user.getEmail());
-            adapter.addItem(jUsr);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public void setUser(Integer pos, Persona user) {
-        try {
-            JSONObject jUsr = new JSONObject();
-            jUsr.put("nombre", user.getNombre());
-            jUsr.put("apellido", user.getApellido());
-            jUsr.put("mail", user.getEmail());
-            adapter.setItem(pos, jUsr);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }

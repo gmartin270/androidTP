@@ -32,8 +32,6 @@ import java.util.TimerTask;
  * Created by Guille on 15/04/2016.
  */
 public class APIClientService extends Service {
-    private static final String LOGTAG = "LogsAndroid";
-
     APIBinder mBinder = new APIBinder();
     UserAdapter mAdapter = null;
     public static String mURL = "http://tm5-agmoyano.rhcloud.com/";//"http://192.168.1.18:8080/ws/";
@@ -70,65 +68,64 @@ public class APIClientService extends Service {
 
         public void findUsers(){
             try{
+                RestClient.get(mURL, new RestClient.Result() {
+                    @Override
+                    public void onResult(Object result) {
+                        try {
+                            JSONArray resArray = (JSONArray) result;
 
-                    RestClient.get(mURL, new RestClient.Result() {
-                        @Override
-                        public void onResult(Object result) {
-                            try {
-                                JSONArray resArray = (JSONArray) result;
+                            if (mBound) {
+                                mAdapter = UserAdapter.getInstance();
+                                mAdapter.setList((JSONArray) result);
+                            } else {
+                                int newCount = 0;
+                                JSONObject newUser = new JSONObject();
+                                FileInputStream fis = openFileInput(usersFile);
+                                JSONArray usersState = new JSONArray(IOUtils.toString(fis));
 
-                                if (mBound) {
-                                    mAdapter = UserAdapter.getInstance();
-                                    mAdapter.setList((JSONArray) result);
-                                } else {
-                                    int newCount = 0;
-                                    JSONObject newUser = new JSONObject();
-                                    FileInputStream fis = openFileInput(usersFile);
-                                    JSONArray usersState = new JSONArray(IOUtils.toString(fis));
+                                for (int i = 0; i < resArray.length(); i++) {
+                                    JSONObject user = resArray.getJSONObject(i);
+                                    boolean isNew = true;
 
-                                    for (int i = 0; i < resArray.length(); i++) {
-                                        JSONObject user = resArray.getJSONObject(i);
-                                        boolean isNew = true;
-
-                                        for (int j = 0; j < usersState.length(); j++) {
-                                            if (user.getString("_id").equals(usersState.getJSONObject(j).getString("_id"))) {
-                                                isNew = false;
-                                                break;
-                                            }
-                                        }
-
-                                        if (isNew) {
-                                            newCount++;
-                                            newUser = user;
+                                    for (int j = 0; j < usersState.length(); j++) {
+                                        if (user.getString("_id").equals(usersState.getJSONObject(j).getString("_id"))) {
+                                            isNew = false;
+                                            break;
                                         }
                                     }
 
-                                    if (newCount > 0) {
-                                        if (newCount == 1) {
-                                            mBuilder.setContentText(newUser.getString("nombre") + " " + newUser.getString("apellido"));
-                                        } else {
-                                            mBuilder.setContentText(newCount + " " + R.string.newUser);
-                                        }
-
-                                        mNotificationManager.notify(1, mBuilder.build());
+                                    if (isNew) {
+                                        newCount++;
+                                        newUser = user;
                                     }
                                 }
-                            }catch (JSONException e){
-                                e.printStackTrace();
-                            }catch (FileNotFoundException e){
-                                e.printStackTrace();
-                            }catch (IOException e) {
-                                e.printStackTrace();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
 
-                        @Override
-                        public void onError(String message) {
-                            Toast.makeText(APIClientService.this, message, Toast.LENGTH_SHORT);
+                                if (newCount > 0) {
+                                    if (newCount == 1) {
+                                        mBuilder.setContentText(newUser.getString("nombre") + " " + newUser.getString("apellido"));
+                                    } else {
+                                        mBuilder.setContentText(newCount + " " + R.string.newUser);
+                                    }
+
+                                    mNotificationManager.notify(1, mBuilder.build());
+                                }
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }catch (FileNotFoundException e){
+                            e.printStackTrace();
+                        }catch (IOException e) {
+                            e.printStackTrace();
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-                    });
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(APIClientService.this, message, Toast.LENGTH_SHORT);
+                    }
+                });
 
             }catch(IOException e){
                 Toast.makeText(APIClientService.this, e.getMessage(), Toast.LENGTH_SHORT);
@@ -208,7 +205,6 @@ public class APIClientService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("LocalService", "Received start id " + startId + ": " + intent);
         return START_STICKY;
     }
 }
