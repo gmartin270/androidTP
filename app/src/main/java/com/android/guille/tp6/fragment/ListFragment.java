@@ -1,6 +1,7 @@
 package com.android.guille.tp6.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ public class ListFragment extends Fragment {
             adapter = UserAdapter.getInstance();
         }
         root = inflater.inflate(R.layout.fragment_list, container, false);
-        Button fab = (Button) root.findViewById(R.id.btnAdd);
+        FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
         if(((MainActivity)getActivity()).getIsPort()) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override

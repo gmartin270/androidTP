@@ -4,31 +4,20 @@
     android:layout_height="match_parent"
     tools:context="com.android.guille.tp6.fragment.ListFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_add"
+        android:visibility="visible" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="17.77"
-            android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/btnAdd"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+" />
-
-            <ListView
-                android:id="@+id/listaPersonas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
-            </ListView>
-
-        </LinearLayout>
-    </LinearLayout>
+    <ListView
+        android:id="@+id/listaPersonas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp">
+    </ListView>
 </FrameLayout>
