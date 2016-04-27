@@ -55,7 +55,7 @@ public class FormFragment extends Fragment {
                     mUser = new JSONObject();
                     mUser.put("apellido", apellido.getText().toString());
                     mUser.put("nombre", nombre.getText().toString());
-                    mUser.put("", mail.getText().toString());
+                    mUser.put("mail", mail.getText().toString());
                     ((MainActivity) getActivity()).setUser(mUser, (mId != null ? mId : null));
 
                 }catch (JSONException e){

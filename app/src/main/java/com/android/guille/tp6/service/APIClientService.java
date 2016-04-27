@@ -34,7 +34,7 @@ import java.util.TimerTask;
 public class APIClientService extends Service {
     APIBinder mBinder = new APIBinder();
     UserAdapter mAdapter = null;
-    public static String mURL = "http://tm5-agmoyano.rhcloud.com/";//"http://192.168.1.18:8080/ws/";
+    public static String mURL = "http://192.168.1.18:8080/ws/"; //"http://tm5-agmoyano.rhcloud.com/";//"http://192.168.1.18:8080/ws/";
     private Timer timer = new Timer();
 
     int MAIN_ACTIVITY_REQUEST = 1;
@@ -78,7 +78,7 @@ public class APIClientService extends Service {
                                 mAdapter = UserAdapter.getInstance();
                                 mAdapter.setList((JSONArray) result);
                             } else {
-                                int newCount = 0;
+                                Integer newCount = new Integer(0);
                                 JSONObject newUser = new JSONObject();
                                 FileInputStream fis = openFileInput(usersFile);
                                 JSONArray usersState = new JSONArray(IOUtils.toString(fis));
@@ -100,11 +100,11 @@ public class APIClientService extends Service {
                                     }
                                 }
 
-                                if (newCount > 0) {
-                                    if (newCount == 1) {
+                                if (newCount.intValue() > 0) {
+                                    if (newCount.intValue() == 1) {
                                         mBuilder.setContentText(newUser.getString("nombre") + " " + newUser.getString("apellido"));
                                     } else {
-                                        mBuilder.setContentText(newCount + " " + R.string.newUser);
+                                        mBuilder.setContentText(newCount.toString() + " " + getResources().getString(R.string.newUser));//
                                     }
 
                                     mNotificationManager.notify(1, mBuilder.build());

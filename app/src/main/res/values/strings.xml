@@ -4,5 +4,5 @@
     <string name="deleteUserMessage">Está seguro de borrar el registro?</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
-    <string name="newUser">Nuevo Usuario</string>
+    <string name="newUser">Nuevos Usuarios</string>
 </resources>
