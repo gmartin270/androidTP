@@ -9,12 +9,16 @@ import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.android.guille.tp6.R;
 import com.android.guille.tp6.adapter.UserAdapter;
 import com.android.guille.tp6.fragment.FormFragment;
 import com.android.guille.tp6.fragment.ListFragment;
+import com.android.guille.tp6.fragment.SettingsFragment;
 import com.android.guille.tp6.service.APIClientService;
 
 import org.json.JSONObject;
@@ -71,6 +75,31 @@ public class MainActivity extends AppCompatActivity {
             transaction.replace(R.id.formContainer, form);
             transaction.commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case R.id.preferences:
+            {
+                Intent intent = new Intent();
+                intent.setClassName(this, "com.android.guille.tp6.activity.PreferenceActivity");
+                startActivity(intent);
+                return true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

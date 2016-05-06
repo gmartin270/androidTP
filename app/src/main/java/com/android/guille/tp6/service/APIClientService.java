@@ -5,16 +5,21 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.android.guille.tp6.R;
 import com.android.guille.tp6.activity.MainActivity;
+import com.android.guille.tp6.activity.PreferenceActivity;
 import com.android.guille.tp6.adapter.UserAdapter;
 import com.android.guille.tp6.entity.RestClient;
+import com.android.guille.tp6.fragment.SettingsFragment;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -34,7 +39,7 @@ import java.util.TimerTask;
 public class APIClientService extends Service {
     APIBinder mBinder = new APIBinder();
     UserAdapter mAdapter = null;
-    public static String mURL = "http://192.168.1.18:8080/ws/"; //"http://tm5-agmoyano.rhcloud.com/";//"http://192.168.1.18:8080/ws/";
+    //public static String mURL = "http://192.168.1.18:8080/ws/"; //"http://tm5-agmoyano.rhcloud.com/";//"http://192.168.1.18:8080/ws/";
     private Timer timer = new Timer();
 
     int MAIN_ACTIVITY_REQUEST = 1;
@@ -68,7 +73,7 @@ public class APIClientService extends Service {
 
         public void findUsers(){
             try{
-                RestClient.get(mURL, new RestClient.Result() {
+                RestClient.get(getURL(), new RestClient.Result() {
                     @Override
                     public void onResult(Object result) {
                         try {
@@ -135,7 +140,7 @@ public class APIClientService extends Service {
         public void addUser(JSONObject usuario) {
 
             try {
-                RestClient.post(mURL, usuario, resultHandler);
+                RestClient.post(getURL(), usuario, resultHandler);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -143,7 +148,7 @@ public class APIClientService extends Service {
 
         public void setUser(String id, JSONObject usuario) {
             try {
-                RestClient.put(mURL + id, usuario, resultHandler);
+                RestClient.put(getURL() + id, usuario, resultHandler);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -151,11 +156,25 @@ public class APIClientService extends Service {
 
         public void rmUser(String id) {
             try {
-                RestClient.delete(mURL + id, resultHandler);
+                RestClient.delete(getURL() + id, resultHandler);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        private String getURL() {
+            String url = "";
+
+            if (mActivity != null) {
+                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                url = sharedPref.getString("pref_URL_API", "");
+
+                Log.i("ApiBinder", url);
+            }
+
+            return url;
+        }
+
     }
 
     @Override
@@ -166,6 +185,14 @@ public class APIClientService extends Service {
         PendingIntent pi = PendingIntent.getActivity(APIClientService.this, MAIN_ACTIVITY_REQUEST, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder = new NotificationCompat.Builder(this).setSmallIcon(android.R.drawable.stat_notify_sync).setContentTitle(getString(R.string.newUser)).setContentIntent(pi);
+
+        int delay = 5000;
+
+        if(mBinder.mActivity != null){
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mBinder.mActivity);
+            delay = sharedPref.getInt("pref_delay", 5) * 1000;
+        }
+
         timer.schedule(new TimerTask(){
             @Override
             public void run() {
@@ -207,4 +234,6 @@ public class APIClientService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
+
+
 }

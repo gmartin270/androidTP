@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_URL_API"
+        android:title="URL API"
+        android:summary="URL que permite ubicar el origen de datos."
+        android:defaultValue="http://tm5-agmoyano.rhcloud.com/" />
+    <EditTextPreference
+        android:key="pref_delay"
+        android:title="Intervalo actualizacion de datos."
+        android:summary="Tiempo (segundos) en que el app refrescará los datos desde el API."
+        android:defaultValue="5" />
+</PreferenceScreen>
