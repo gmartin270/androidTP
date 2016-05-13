@@ -17,10 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.PreferenceActivity"
-            android:label="Preferences">
-        </activity>
         <service
             android:name=".service.APIClientService"
             android:exported="true" />

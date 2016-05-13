@@ -92,9 +92,18 @@ public class MainActivity extends AppCompatActivity {
         {
             case R.id.preferences:
             {
-                Intent intent = new Intent();
-                intent.setClassName(this, "com.android.guille.tp6.activity.PreferenceActivity");
-                startActivity(intent);
+                SettingsFragment settings = new SettingsFragment();
+                FragmentTransaction transaction = manager.beginTransaction();
+
+                if(isPort){
+                    transaction.replace(R.id.container, settings);
+
+                }else{
+                    transaction.replace(R.id.listContainer, settings);
+                    transaction.replace(R.id.formContainer, settings);
+                }
+                transaction.addToBackStack("settings");
+                transaction.commit();
                 return true;
             }
         }
