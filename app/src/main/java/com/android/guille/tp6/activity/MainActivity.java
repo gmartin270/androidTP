@@ -16,6 +16,7 @@ import android.view.View;
 
 import com.android.guille.tp6.R;
 import com.android.guille.tp6.adapter.UserAdapter;
+import com.android.guille.tp6.com.android.guille.tp6.db.UserDBHelper;
 import com.android.guille.tp6.fragment.FormFragment;
 import com.android.guille.tp6.fragment.ListFragment;
 import com.android.guille.tp6.fragment.SettingsFragment;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     FormFragment form = new FormFragment();
     private Boolean isPort = null;
     private APIClientService.APIBinder mBinder;
+    UserDBHelper mDB;
 
     public Boolean getIsPort() {
         return isPort;
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mDB = UserDBHelper.getInstance(this);
 
         UserAdapter userAdapter = UserAdapter.getInstance();
         userAdapter.setmContext(MainActivity.this);
@@ -128,14 +132,12 @@ public class MainActivity extends AppCompatActivity {
             form.selectUser((JSONObject) persona);
     }
 
-    public void setUser(JSONObject user, String id) {
-        if (user != null) {
-            if (id == null) {
-                mBinder.addUser(user);
-            } else {
-                //user.put("_id", user.getId());
-                mBinder.setUser(id, user);
-            }
+    public void setUser(JSONObject user, String Id) {
+        if(user != null) {
+            if (Id != null && Id.length() > 0)
+                mDB.update(user);
+            else
+                mDB.create(user);
         }
 
         if (isPort) {
@@ -145,9 +147,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void rmUser(String id){
-        if(mBinder != null){
-            mBinder.rmUser(id);
-        }
+    public void rmUser(JSONObject user){
+        mDB.delete(user);
     }
 }

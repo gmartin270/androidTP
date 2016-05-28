@@ -1,12 +1,10 @@
 <resources>
-    <string name="app_name">TP6</string>
+    <string name="app_name">TP8</string>
     <string name="deleteUserTitle">Borrado de persona</string>
     <string name="deleteUserMessage">Está seguro de borrar el registro?</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
     <string name="newUser">Nuevos Usuarios</string>
     <string name="seconds">segundos</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="persona_delete">Borrar Registro</string>
 </resources>

@@ -20,6 +20,7 @@ public class FormFragment extends Fragment {
     private static View mRoot;
     private static JSONObject mUser = null;
     private static String mId;
+    private static String mMongoId;
 
     public FormFragment() {
         // Required empty public constructor
@@ -56,7 +57,11 @@ public class FormFragment extends Fragment {
                     mUser.put("apellido", apellido.getText().toString());
                     mUser.put("nombre", nombre.getText().toString());
                     mUser.put("mail", mail.getText().toString());
-                    ((MainActivity) getActivity()).setUser(mUser, (mId != null ? mId : null));
+                    mUser.put("_id", mId);
+                    mUser.put("mongo_id", mMongoId);
+                    ((MainActivity) getActivity()).setUser(mUser, mId);
+                    mId = null;
+                    mMongoId = null;
 
                 }catch (JSONException e){
                     Log.e("Form Fragment - onClick", e.getMessage());
@@ -70,7 +75,8 @@ public class FormFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setUser(null);
-                //mPos = null;
+                mId = null;
+                mMongoId = null;
                 mUser = null;
                 ((MainActivity) getActivity()).setUser(null, null);
 
@@ -95,6 +101,7 @@ public class FormFragment extends Fragment {
                     apellido.setText(user.getString("apellido"));
                     mail.setText(user.getString("mail"));
                     mId = user.getString("_id");
+                    mMongoId = user.optString("mongo_id");
                 }catch (JSONException e){
                     Log.e("Form Fragment - setUser", e.getMessage());
                 }

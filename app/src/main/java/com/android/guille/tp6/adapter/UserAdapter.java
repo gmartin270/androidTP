@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.android.guille.tp6.R;
 import com.android.guille.tp6.activity.MainActivity;
+import com.android.guille.tp6.com.android.guille.tp6.db.UserDBHelper;
 import com.android.guille.tp6.entity.RestClient;
 
 import org.json.JSONArray;
@@ -28,6 +29,7 @@ public class UserAdapter extends BaseAdapter {
     private RestClient.Result resultHandler = null;
     JSONArray usrs = new JSONArray();
     private String id;
+    UserDBHelper mDB;
 
     private static UserAdapter instance;
 
@@ -46,6 +48,7 @@ public class UserAdapter extends BaseAdapter {
 
     public void setmContext(Context mContext) {
         this.mContext = mContext;
+        mDB = UserDBHelper.getInstance(mContext);
     }
 
     public void setList(JSONArray personas){
@@ -59,22 +62,12 @@ public class UserAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(usrs != null)
-            return usrs.length();
-        else
-            return 0;
+        return mDB.count();
     }
 
     @Override
     public JSONObject getItem(int position) {
-        JSONObject result = null;
-
-        try{
-            result = usrs.getJSONObject(position);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        return result;
+        return mDB.read(position);
     }
 
     @Override
@@ -91,6 +84,8 @@ public class UserAdapter extends BaseAdapter {
             if (convertView == null) {
                 LayoutInflater li = LayoutInflater.from(mContext);
                 convertView = li.inflate(R.layout.item_persona, null);
+
+                //convertView.setLongClickable(true);
             }
 
             try {
@@ -103,7 +98,7 @@ public class UserAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
 
-            ImageView delete = (ImageView) convertView.findViewById(R.id.delete);
+            /*ImageView delete = (ImageView) convertView.findViewById(R.id.delete);
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,7 +115,7 @@ public class UserAdapter extends BaseAdapter {
                             .setNegativeButton(R.string.no, null)
                             .show();
                 }
-            });
+            });*/
         }catch (JSONException e){
             Toast.makeText(mContext,e.getMessage(), Toast.LENGTH_SHORT);
         }
